@@ -9,6 +9,13 @@ import {
   Package,
   ClipboardCheck,
   Database,
+  ClipboardEdit,
+  MapPinPlus,
+  Building2,
+  UserCog,
+  Shield,
+  LogOut,
+  ChevronRight,
 } from "lucide-react";
 import {
   Sidebar,
@@ -22,17 +29,53 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useAuth, hasRole, ROLE_LABELS, type UserRole } from "@/contexts/auth-context";
 
-const navItems = [
-  { title: "Overview",           url: "/",             icon: LayoutDashboard },
-  { title: "Attendance",         url: "/attendance",   icon: Users           },
-  { title: "School Visits",      url: "/visits",       icon: MapPin           },
-  { title: "Teacher Performance",url: "/teachers",     icon: UserCheck        },
-  { title: "Student Progress",   url: "/progress",     icon: TrendingUp       },
-  { title: "Resources",          url: "/resources",    icon: Package          },
-  { title: "Readiness",          url: "/readiness",    icon: ClipboardCheck   },
-  { title: "Data Sources",       url: "/data-sources", icon: Database         },
+interface NavItem {
+  title: string;
+  url: string;
+  icon: React.ElementType;
+  minRole?: UserRole;
+}
+
+// Items always shown (all roles in demo, or any logged-in user)
+const CORE_NAV: NavItem[] = [
+  { title: "Overview",      url: "/",          icon: LayoutDashboard },
+  { title: "Attendance",    url: "/attendance", icon: Users           },
+  { title: "School Visits", url: "/visits",     icon: MapPin          },
 ];
+
+// Data entry — role-gated
+const ENTRY_NAV: NavItem[] = [
+  { title: "Log Attendance", url: "/log-attendance", icon: ClipboardEdit, minRole: "head_teacher" },
+  { title: "Log Visit",      url: "/log-visit",       icon: MapPinPlus,   minRole: "sso"          },
+];
+
+// Analytics — subeb_admin and above
+const ANALYTICS_NAV: NavItem[] = [
+  { title: "Teacher Performance", url: "/teachers",     icon: UserCheck,      minRole: "subeb_admin" },
+  { title: "Student Progress",    url: "/progress",     icon: TrendingUp,     minRole: "subeb_admin" },
+  { title: "Resources",           url: "/resources",    icon: Package,        minRole: "subeb_admin" },
+  { title: "Readiness",           url: "/readiness",    icon: ClipboardCheck, minRole: "subeb_admin" },
+  { title: "Data Sources",        url: "/data-sources", icon: Database,       minRole: "subeb_admin" },
+];
+
+// Management — subeb_admin and above
+const MANAGEMENT_NAV: NavItem[] = [
+  { title: "Manage Schools", url: "/manage-schools", icon: Building2, minRole: "subeb_admin" },
+  { title: "Manage Users",   url: "/manage-users",   icon: UserCog,   minRole: "super_admin" },
+  { title: "Admin",          url: "/admin",          icon: Shield,    minRole: "super_admin" },
+];
+
+const ROLE_BADGE_COLORS: Record<UserRole, string> = {
+  super_admin:  "bg-purple-100 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300",
+  subeb_admin:  "bg-blue-100 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300",
+  head_teacher: "bg-teal-100 text-teal-700 dark:bg-teal-950/60 dark:text-teal-300",
+  sso:          "bg-orange-100 text-orange-700 dark:bg-orange-950/60 dark:text-orange-300",
+  teacher:      "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
+};
 
 function EduTrackLogo() {
   return (
@@ -72,8 +115,70 @@ function EduTrackLogo() {
   );
 }
 
-export function AppSidebar() {
+function NavGroup({ items, label, userRole, isDemoMode }: {
+  items: NavItem[];
+  label: string;
+  userRole: UserRole | undefined;
+  isDemoMode: boolean;
+}) {
   const [location] = useHashLocation();
+
+  const visibleItems = items.filter(item => {
+    if (isDemoMode) return true; // Show all in demo mode
+    if (!item.minRole) return true;
+    if (!userRole) return false;
+    return hasRole(userRole, item.minRole);
+  });
+
+  if (visibleItems.length === 0) return null;
+
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel className="text-sidebar-foreground/50 text-xs uppercase tracking-wider px-4 mb-1">
+        {label}
+      </SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {visibleItems.map((item) => {
+            const isActive = location === item.url;
+            return (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={isActive}
+                  data-testid={`nav-${item.title.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  <Link href={item.url} className="flex items-center gap-3 px-4 py-2.5">
+                    <item.icon className="h-4 w-4 flex-shrink-0" />
+                    <span className="text-sm font-medium">{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  );
+}
+
+export function AppSidebar() {
+  const { profile, isDemoMode, signOut } = useAuth();
+  const [, navigate] = useHashLocation();
+
+  const userRole = profile?.role;
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/login");
+  };
+
+  // Filter entry nav based on role
+  const visibleEntryNav = ENTRY_NAV.filter(item => {
+    if (isDemoMode) return true;
+    if (!item.minRole || !userRole) return isDemoMode;
+    return hasRole(userRole, item.minRole);
+  });
 
   return (
     <Sidebar>
@@ -91,40 +196,57 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-sidebar-foreground/50 text-xs uppercase tracking-wider px-4 mb-1">
-            Analytics
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navItems.map((item) => {
-                const isActive = location === item.url;
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive}
-                      data-testid={`nav-${item.title.toLowerCase().replace(/\s+/g, "-")}`}
-                    >
-                      <Link href={item.url} className="flex items-center gap-3 px-4 py-2.5">
-                        <item.icon className="h-4 w-4 flex-shrink-0" />
-                        <span className="text-sm font-medium">{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+      <SidebarContent className="overflow-y-auto">
+        {/* Core nav - always shown */}
+        <NavGroup items={CORE_NAV} label="Dashboard" userRole={userRole} isDemoMode={isDemoMode} />
+
+        {/* Data entry - role-gated */}
+        {visibleEntryNav.length > 0 && (
+          <NavGroup items={visibleEntryNav} label="Data Entry" userRole={userRole} isDemoMode={isDemoMode} />
+        )}
+
+        {/* Analytics - subeb_admin+ */}
+        <NavGroup items={ANALYTICS_NAV} label="Analytics" userRole={userRole} isDemoMode={isDemoMode} />
+
+        {/* Management - subeb_admin+ */}
+        <NavGroup items={MANAGEMENT_NAV} label="Management" userRole={userRole} isDemoMode={isDemoMode} />
       </SidebarContent>
 
-      <SidebarFooter className="px-4 py-3 border-t border-sidebar-border">
+      {/* User Info + Sign Out */}
+      <SidebarFooter className="px-4 py-3 border-t border-sidebar-border space-y-3">
+        {profile && (
+          <div className="flex items-start gap-3">
+            {/* Avatar */}
+            <div className="h-8 w-8 rounded-full bg-[hsl(183_60%_22%)] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+              {profile.full_name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase()}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold text-sidebar-foreground truncate leading-tight">
+                {profile.full_name}
+              </p>
+              <p className="text-xs text-sidebar-foreground/60 truncate leading-none mt-0.5">
+                {profile.email || ""}
+              </p>
+              <span className={`inline-block mt-1 text-[10px] font-medium px-1.5 py-0.5 rounded ${ROLE_BADGE_COLORS[profile.role]}`}>
+                {ROLE_LABELS[profile.role]}
+              </span>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 flex-shrink-0 text-sidebar-foreground/60 hover:text-sidebar-foreground"
+              onClick={handleSignOut}
+              title="Sign out"
+              data-testid="button-sign-out"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        )}
+
+        {/* Data sources credit (small) */}
         <div className="text-xs text-sidebar-foreground/40 leading-relaxed">
-          <p className="font-medium text-sidebar-foreground/60">Data Sources</p>
-          <p>UBEC NPA 2022/23 • EdoBEST</p>
-          <p>PLANE • DHIS2/EdoEMIS</p>
+          <p>UBEC NPA 2022/23 · EdoBEST · PLANE</p>
         </div>
       </SidebarFooter>
     </Sidebar>

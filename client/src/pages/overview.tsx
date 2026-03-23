@@ -17,6 +17,7 @@ import {
   STATE_DATA,
 } from "@/lib/data";
 import { useLiveData } from "@/hooks/use-live-data";
+import { useDbData } from "@/hooks/use-db-data";
 import { useEffect, useRef, useState } from "react";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -189,6 +190,9 @@ export default function Overview() {
     enrollmentM: +(s.enrollment / 1_000_000).toFixed(2),
   }));
 
+  // Database data (with demo fallback)
+  const { isRealData, isDemoMode: isDemo, clientName, kpis } = useDbData();
+
   // Live data hooks
   const { data: wbData, isLoading: wbLoading, isFetching: wbFetching } =
     useLiveData<WorldBankResponse>("/api/live/worldbank", 300000); // 5 min cache matches server
@@ -227,13 +231,31 @@ export default function Overview() {
           <Badge variant="outline" className="text-xs border-primary/30 text-primary bg-primary/5">
             UBEC NPA 2022/23
           </Badge>
-          <Badge variant="outline" className="text-xs border-emerald-500/40 text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 flex items-center gap-1">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
-            </span>
-            World Bank Live
-          </Badge>
+          {isRealData ? (
+            <Badge variant="outline" className="text-xs border-[hsl(183_98%_22%)]/40 text-[hsl(183_98%_22%)] bg-[hsl(183_98%_22%)]/5 flex items-center gap-1">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+              </span>
+              Connected · {clientName}
+            </Badge>
+          ) : (
+            <>
+              <Badge variant="outline" className="text-xs border-emerald-500/40 text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 flex items-center gap-1">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                </span>
+                World Bank Live
+              </Badge>
+              {isDemo && (
+                <Badge variant="outline" className="text-xs text-amber-600 border-amber-300 bg-amber-50 dark:bg-amber-950/40 flex items-center gap-1">
+                  <Zap className="h-3 w-3" />
+                  Demo Mode
+                </Badge>
+              )}
+            </>
+          )}
         </div>
       </div>
 

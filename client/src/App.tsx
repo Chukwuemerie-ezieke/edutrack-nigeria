@@ -7,9 +7,11 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { useState, useEffect } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { PerplexityAttribution } from "@/components/PerplexityAttribution";
+import { AuthProvider, useAuth } from "@/contexts/auth-context";
 
 import Overview from "@/pages/overview";
 import Attendance from "@/pages/attendance";
@@ -20,6 +22,12 @@ import Resources from "@/pages/resources";
 import Readiness from "@/pages/readiness";
 import DataSources from "@/pages/data-sources";
 import NotFound from "@/pages/not-found";
+import LoginPage from "@/pages/login";
+import LogAttendancePage from "@/pages/log-attendance";
+import LogVisitPage from "@/pages/log-visit";
+import ManageSchoolsPage from "@/pages/manage-schools";
+import ManageUsersPage from "@/pages/manage-users";
+import AdminPage from "@/pages/admin";
 import { LiveFeedBanner } from "@/components/live-feed-banner";
 
 function ThemeToggle({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
@@ -38,6 +46,7 @@ function ThemeToggle({ dark, onToggle }: { dark: boolean; onToggle: () => void }
 }
 
 function AppRouter() {
+  const { isDemoMode } = useAuth();
   return (
     <Switch>
       <Route path="/" component={Overview} />
@@ -48,8 +57,93 @@ function AppRouter() {
       <Route path="/resources" component={Resources} />
       <Route path="/readiness" component={Readiness} />
       <Route path="/data-sources" component={DataSources} />
+      <Route path="/log-attendance" component={LogAttendancePage} />
+      <Route path="/log-visit" component={LogVisitPage} />
+      <Route path="/manage-schools" component={ManageSchoolsPage} />
+      <Route path="/manage-users" component={ManageUsersPage} />
+      <Route path="/admin" component={AdminPage} />
       <Route component={NotFound} />
     </Switch>
+  );
+}
+
+function AuthenticatedApp({ dark, setDark }: { dark: boolean; setDark: (v: (p: boolean) => boolean) => void }) {
+  const { isDemoMode, profile, loading } = useAuth();
+  const [location] = useHashLocation();
+
+  // Show login page
+  if (location === "/login") {
+    return (
+      <Router hook={useHashLocation}>
+        <Switch>
+          <Route path="/login" component={LoginPage} />
+        </Switch>
+      </Router>
+    );
+  }
+
+  // In production mode, require login
+  if (!isDemoMode && !loading && !profile) {
+    return (
+      <Router hook={useHashLocation}>
+        <Switch>
+          <Route path="/login" component={LoginPage} />
+          <Route component={LoginPage} />
+        </Switch>
+      </Router>
+    );
+  }
+
+  const sidebarStyle = {
+    "--sidebar-width": "17rem",
+    "--sidebar-width-icon": "4rem",
+  };
+
+  return (
+    <SidebarProvider style={sidebarStyle as React.CSSProperties}>
+      <div className="flex h-screen w-full overflow-hidden">
+        <AppSidebar />
+        <div className="flex flex-col flex-1 min-w-0">
+          <header className="flex items-center justify-between px-4 py-2 border-b border-border bg-background/95 backdrop-blur-sm h-12 flex-shrink-0 z-10">
+            <div className="flex items-center gap-3">
+              <SidebarTrigger data-testid="button-sidebar-toggle" className="h-8 w-8" />
+              <span className="text-sm text-muted-foreground hidden sm:block">
+                School Operational Excellence Dashboard
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              {isDemoMode && (
+                <Badge variant="outline" className="text-amber-600 border-amber-300 bg-amber-50 dark:bg-amber-950/40 text-xs hidden sm:flex items-center gap-1">
+                  <Zap className="h-3 w-3" />
+                  Demo Mode
+                </Badge>
+              )}
+              {!isDemoMode && profile && (
+                <span className="text-xs text-muted-foreground hidden md:block">
+                  Connected · {profile.client_id ? "Live Data" : ""}
+                </span>
+              )}
+              {isDemoMode && (
+                <span className="text-xs text-muted-foreground hidden md:block">
+                  Live Data · UBEC NPA 2022/23 + World Bank
+                </span>
+              )}
+              <ThemeToggle dark={dark} onToggle={() => setDark(d => !d)} />
+            </div>
+          </header>
+
+          <LiveFeedBanner />
+
+          <main className="flex-1 overflow-y-auto">
+            <Router hook={useHashLocation}>
+              <AppRouter />
+            </Router>
+          </main>
+
+          <PerplexityAttribution />
+        </div>
+      </div>
+    </SidebarProvider>
   );
 }
 
@@ -66,47 +160,14 @@ function App() {
     }
   }, [dark]);
 
-  const sidebarStyle = {
-    "--sidebar-width": "17rem",
-    "--sidebar-width-icon": "4rem",
-  };
-
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <SidebarProvider style={sidebarStyle as React.CSSProperties}>
-          <div className="flex h-screen w-full overflow-hidden">
-            <AppSidebar />
-            <div className="flex flex-col flex-1 min-w-0">
-              <header className="flex items-center justify-between px-4 py-2 border-b border-border bg-background/95 backdrop-blur-sm h-12 flex-shrink-0 z-10">
-                <div className="flex items-center gap-3">
-                  <SidebarTrigger data-testid="button-sidebar-toggle" className="h-8 w-8" />
-                  <span className="text-sm text-muted-foreground hidden sm:block">
-                    School Operational Excellence Dashboard
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground hidden md:block">
-                    Live Data · UBEC NPA 2022/23 + World Bank
-                  </span>
-                  <ThemeToggle dark={dark} onToggle={() => setDark(d => !d)} />
-                </div>
-              </header>
-
-              <LiveFeedBanner />
-
-              <main className="flex-1 overflow-y-auto">
-                <Router hook={useHashLocation}>
-                  <AppRouter />
-                </Router>
-              </main>
-
-              <PerplexityAttribution />
-            </div>
-          </div>
-        </SidebarProvider>
-        <Toaster />
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <AuthenticatedApp dark={dark} setDark={setDark} />
+          <Toaster />
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
