@@ -36,12 +36,18 @@ export const NATIONAL_OVERVIEW = {
 };
 
 export const STATE_DATA = [
-  { state: "Edo",     schools: 1111,  enrollment: 450000,   teachers: 15000, ptr: 27, ger: 85, ner: 72, attendanceRate: 81.9, color: "hsl(183 98% 22%)" },
   { state: "Kano",    schools: 6200,  enrollment: 3200000,  teachers: 85000, ptr: 38, ger: 78, ner: 62, attendanceRate: 71.2, color: "hsl(20 73% 34%)" },
   { state: "Kaduna",  schools: 4800,  enrollment: 2100000,  teachers: 52000, ptr: 40, ger: 82, ner: 65, attendanceRate: 73.5, color: "hsl(183 50% 15%)" },
-  { state: "Jigawa",  schools: 2900,  enrollment: 1100000,  teachers: 28000, ptr: 39, ger: 65, ner: 48, attendanceRate: 68.4, color: "hsl(43 74% 49%)" },
-  { state: "Anambra", schools: 2400,  enrollment: 680000,   teachers: 22000, ptr: 31, ger: 95, ner: 88, attendanceRate: 85.3, color: "hsl(103 56% 31%)" },
   { state: "Lagos",   schools: 5800,  enrollment: 2800000,  teachers: 75000, ptr: 37, ger: 92, ner: 82, attendanceRate: 83.1, color: "hsl(183 98% 22%)" },
+  { state: "Oyo",     schools: 4200,  enrollment: 1800000,  teachers: 48000, ptr: 38, ger: 88, ner: 78, attendanceRate: 79.4, color: "hsl(43 74% 49%)" },
+  { state: "Anambra", schools: 2400,  enrollment: 680000,   teachers: 22000, ptr: 31, ger: 95, ner: 88, attendanceRate: 85.3, color: "hsl(103 56% 31%)" },
+  { state: "Enugu",   schools: 2200,  enrollment: 620000,   teachers: 20000, ptr: 31, ger: 93, ner: 85, attendanceRate: 84.1, color: "hsl(145 50% 30%)" },
+  { state: "Edo",     schools: 1800,  enrollment: 450000,   teachers: 15000, ptr: 30, ger: 85, ner: 72, attendanceRate: 81.9, color: "hsl(183 98% 22%)" },
+  { state: "Rivers",  schools: 3100,  enrollment: 920000,   teachers: 28000, ptr: 33, ger: 90, ner: 80, attendanceRate: 82.5, color: "hsl(210 60% 40%)" },
+  { state: "Bauchi",  schools: 3500,  enrollment: 1400000,  teachers: 35000, ptr: 40, ger: 68, ner: 50, attendanceRate: 68.4, color: "hsl(30 60% 45%)" },
+  { state: "Borno",   schools: 2800,  enrollment: 980000,   teachers: 25000, ptr: 39, ger: 55, ner: 42, attendanceRate: 64.8, color: "hsl(0 50% 40%)" },
+  { state: "Plateau", schools: 2600,  enrollment: 750000,   teachers: 21000, ptr: 36, ger: 82, ner: 72, attendanceRate: 76.3, color: "hsl(270 40% 45%)" },
+  { state: "Kwara",   schools: 1900,  enrollment: 520000,   teachers: 16000, ptr: 33, ger: 86, ner: 76, attendanceRate: 78.9, color: "hsl(50 60% 40%)" },
 ];
 
 export const MONTHLY_ATTENDANCE = [
@@ -97,18 +103,35 @@ export const VISIT_METRICS = {
 };
 
 export const VISIT_COVERAGE_BY_STATE = [
-  { state: "Kano",   before: 18, after: 75, visits: 542 },
-  { state: "Kaduna", before: 22, after: 78, visits: 498 },
-  { state: "Jigawa", before: 23, after: 79, visits: 482 },
+  { state: "Kano",    before: 18, after: 75, visits: 542 },
+  { state: "Kaduna",  before: 22, after: 78, visits: 498 },
+  { state: "Lagos",   before: 25, after: 82, visits: 510 },
+  { state: "Oyo",     before: 20, after: 76, visits: 445 },
+  { state: "Anambra", before: 28, after: 85, visits: 320 },
+  { state: "Enugu",   before: 26, after: 83, visits: 295 },
+  { state: "Edo",     before: 30, after: 87, visits: 270 },
+  { state: "Rivers",  before: 24, after: 80, visits: 380 },
+  { state: "Bauchi",  before: 15, after: 68, visits: 410 },
+  { state: "Borno",   before: 12, after: 55, visits: 340 },
+  { state: "Plateau", before: 21, after: 74, visits: 350 },
+  { state: "Kwara",   before: 23, after: 79, visits: 260 },
 ];
 
 export const SSO_PERFORMANCE = [
-  { name: "Aminu Musa",      state: "Kano",   visits: 48, coverage: 82, coaching: 38, lessonObs: 44 },
-  { name: "Fatima Abubakar", state: "Kano",   visits: 52, coverage: 86, coaching: 41, lessonObs: 48 },
-  { name: "Ibrahim Yusuf",   state: "Kaduna", visits: 44, coverage: 79, coaching: 35, lessonObs: 40 },
-  { name: "Zainab Shehu",    state: "Kaduna", visits: 47, coverage: 80, coaching: 37, lessonObs: 43 },
-  { name: "Usman Lawal",     state: "Jigawa", visits: 39, coverage: 74, coaching: 31, lessonObs: 36 },
-  { name: "Hauwa Saleh",     state: "Jigawa", visits: 41, coverage: 76, coaching: 33, lessonObs: 38 },
+  { name: "Aminu Musa",       state: "Kano",    visits: 48, coverage: 82, coaching: 38, lessonObs: 44 },
+  { name: "Fatima Abubakar",  state: "Kano",    visits: 52, coverage: 86, coaching: 41, lessonObs: 48 },
+  { name: "Ibrahim Yusuf",    state: "Kaduna",  visits: 44, coverage: 79, coaching: 35, lessonObs: 40 },
+  { name: "Zainab Shehu",     state: "Kaduna",  visits: 47, coverage: 80, coaching: 37, lessonObs: 43 },
+  { name: "Funke Adeyemi",    state: "Lagos",   visits: 51, coverage: 85, coaching: 40, lessonObs: 46 },
+  { name: "Olumide Fashola",  state: "Oyo",     visits: 43, coverage: 78, coaching: 34, lessonObs: 39 },
+  { name: "Chinwe Obi",       state: "Anambra", visits: 46, coverage: 83, coaching: 36, lessonObs: 42 },
+  { name: "Nnamdi Eze",       state: "Enugu",   visits: 42, coverage: 80, coaching: 33, lessonObs: 38 },
+  { name: "Osaze Igbinovia",  state: "Edo",     visits: 45, coverage: 81, coaching: 36, lessonObs: 41 },
+  { name: "Ejiro Onodera",    state: "Rivers",  visits: 44, coverage: 79, coaching: 35, lessonObs: 40 },
+  { name: "Suleiman Garba",   state: "Bauchi",  visits: 38, coverage: 72, coaching: 30, lessonObs: 35 },
+  { name: "Hauwa Saleh",      state: "Borno",   visits: 35, coverage: 65, coaching: 28, lessonObs: 32 },
+  { name: "Danjuma Adamu",    state: "Plateau", visits: 41, coverage: 76, coaching: 33, lessonObs: 38 },
+  { name: "Salamatu Lawal",   state: "Kwara",   visits: 40, coverage: 75, coaching: 32, lessonObs: 37 },
 ];
 
 // Teacher performance metrics — EdoBEST vs Status Quo
@@ -143,21 +166,33 @@ export const LEARNING_OUTCOMES = [
 ];
 
 export const SUBJECT_SCORES_BY_STATE = [
-  { state: "Edo",     maths: 40.0, english: 52.2, science: 46.3, social: 61.2 },
   { state: "Kano",    maths: 32.4, english: 38.1, science: 35.8, social: 49.7 },
   { state: "Kaduna",  maths: 35.1, english: 41.5, science: 38.2, social: 53.4 },
-  { state: "Jigawa",  maths: 28.9, english: 33.7, science: 31.4, social: 44.8 },
-  { state: "Anambra", maths: 54.3, english: 66.8, science: 58.7, social: 71.3 },
   { state: "Lagos",   maths: 49.7, english: 62.3, science: 53.1, social: 67.8 },
+  { state: "Oyo",     maths: 45.2, english: 57.8, science: 49.5, social: 63.1 },
+  { state: "Anambra", maths: 54.3, english: 66.8, science: 58.7, social: 71.3 },
+  { state: "Enugu",   maths: 52.1, english: 64.5, science: 56.3, social: 69.8 },
+  { state: "Edo",     maths: 40.0, english: 52.2, science: 46.3, social: 61.2 },
+  { state: "Rivers",  maths: 47.8, english: 59.4, science: 51.2, social: 65.7 },
+  { state: "Bauchi",  maths: 29.5, english: 34.2, science: 32.1, social: 45.3 },
+  { state: "Borno",   maths: 26.8, english: 31.5, science: 28.7, social: 41.2 },
+  { state: "Plateau", maths: 38.6, english: 48.3, science: 42.1, social: 56.8 },
+  { state: "Kwara",   maths: 41.3, english: 53.7, science: 47.2, social: 60.5 },
 ];
 
 export const GENDER_PARITY = [
-  { state: "Edo",     gpi: 0.94, maleNER: 73, femaleNER: 71 },
   { state: "Kano",    gpi: 0.82, maleNER: 68, femaleNER: 56 },
   { state: "Kaduna",  gpi: 0.85, maleNER: 70, femaleNER: 60 },
-  { state: "Jigawa",  gpi: 0.79, maleNER: 53, femaleNER: 43 },
-  { state: "Anambra", gpi: 1.02, maleNER: 86, femaleNER: 89 },
   { state: "Lagos",   gpi: 0.97, maleNER: 83, femaleNER: 81 },
+  { state: "Oyo",     gpi: 0.95, maleNER: 80, femaleNER: 76 },
+  { state: "Anambra", gpi: 1.02, maleNER: 86, femaleNER: 89 },
+  { state: "Enugu",   gpi: 1.01, maleNER: 84, femaleNER: 86 },
+  { state: "Edo",     gpi: 0.94, maleNER: 73, femaleNER: 71 },
+  { state: "Rivers",  gpi: 0.96, maleNER: 82, femaleNER: 78 },
+  { state: "Bauchi",  gpi: 0.76, maleNER: 56, femaleNER: 44 },
+  { state: "Borno",   gpi: 0.72, maleNER: 48, femaleNER: 36 },
+  { state: "Plateau", gpi: 0.91, maleNER: 75, femaleNER: 69 },
+  { state: "Kwara",   gpi: 0.93, maleNER: 78, femaleNER: 74 },
 ];
 
 export const PROGRESSION_RATES = [
@@ -194,12 +229,18 @@ export const PTR_BY_STATE = STATE_DATA.map(s => ({
 }));
 
 export const TEXTBOOK_AVAILABILITY = [
-  { state: "Edo",     maths: 82, english: 87, science: 76 },
   { state: "Kano",    maths: 54, english: 59, science: 48 },
   { state: "Kaduna",  maths: 61, english: 65, science: 55 },
-  { state: "Jigawa",  maths: 46, english: 51, science: 40 },
-  { state: "Anambra", maths: 91, english: 94, science: 88 },
   { state: "Lagos",   maths: 78, english: 83, science: 72 },
+  { state: "Oyo",     maths: 72, english: 77, science: 66 },
+  { state: "Anambra", maths: 91, english: 94, science: 88 },
+  { state: "Enugu",   maths: 88, english: 92, science: 85 },
+  { state: "Edo",     maths: 82, english: 87, science: 76 },
+  { state: "Rivers",  maths: 75, english: 80, science: 69 },
+  { state: "Bauchi",  maths: 48, english: 53, science: 42 },
+  { state: "Borno",   maths: 38, english: 44, science: 33 },
+  { state: "Plateau", maths: 65, english: 70, science: 59 },
+  { state: "Kwara",   maths: 69, english: 74, science: 63 },
 ];
 
 // School Readiness — NALABE / domain scores
@@ -226,12 +267,18 @@ export const NALABE_SCORES = [
 ];
 
 export const READINESS_BY_STATE = [
-  { state: "Edo",     score: 74, prev: 68, change: 6  },
   { state: "Kano",    score: 58, prev: 53, change: 5  },
   { state: "Kaduna",  score: 62, prev: 57, change: 5  },
-  { state: "Jigawa",  score: 51, prev: 47, change: 4  },
-  { state: "Anambra", score: 82, prev: 78, change: 4  },
   { state: "Lagos",   score: 79, prev: 74, change: 5  },
+  { state: "Oyo",     score: 73, prev: 68, change: 5  },
+  { state: "Anambra", score: 82, prev: 78, change: 4  },
+  { state: "Enugu",   score: 80, prev: 75, change: 5  },
+  { state: "Edo",     score: 74, prev: 68, change: 6  },
+  { state: "Rivers",  score: 76, prev: 71, change: 5  },
+  { state: "Bauchi",  score: 52, prev: 48, change: 4  },
+  { state: "Borno",   score: 45, prev: 41, change: 4  },
+  { state: "Plateau", score: 68, prev: 63, change: 5  },
+  { state: "Kwara",   score: 71, prev: 66, change: 5  },
 ];
 
 export const READINESS_TREND = [

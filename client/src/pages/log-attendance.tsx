@@ -69,7 +69,10 @@ export default function LogAttendancePage() {
   const { data: school, isLoading: schoolLoading } = useQuery({
     queryKey: ["school", profile?.school_id],
     queryFn: async () => {
-      if (!configured || !profile?.school_id) return null;
+      if (isDemoMode || !configured) {
+        return { id: "demo-school", name: "Government Primary School Awka", total_students: 420, total_teachers: 14 };
+      }
+      if (!profile?.school_id) return null;
       const { data } = await supabase
         .from("schools")
         .select("*")
@@ -77,14 +80,14 @@ export default function LogAttendancePage() {
         .single();
       return data;
     },
-    enabled: configured && !!profile?.school_id,
+    enabled: !!profile,
   });
 
   // Check if already submitted today
   const { data: existingRecord } = useQuery({
     queryKey: ["attendance-today", profile?.school_id, today],
     queryFn: async () => {
-      if (!configured || !profile?.school_id) return null;
+      if (isDemoMode || !configured || !profile?.school_id) return null;
       const { data } = await supabase
         .from("daily_attendance")
         .select("*")

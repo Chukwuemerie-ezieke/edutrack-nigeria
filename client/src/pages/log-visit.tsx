@@ -90,14 +90,15 @@ export default function LogVisitPage() {
   const { data: schools, isLoading: schoolsLoading } = useQuery({
     queryKey: ["visit-schools", profile?.client_id],
     queryFn: async () => {
-      if (!configured || !profile?.client_id) return DEMO_SCHOOLS;
-      const { data } = await supabase
+      if (isDemoMode || !configured || !profile?.client_id) return DEMO_SCHOOLS;
+      const { data, error } = await supabase
         .from("schools")
         .select("id, name, lga_id, lgas(name)")
         .eq("client_id", profile.client_id)
         .eq("active", true)
         .order("name");
-      return data || DEMO_SCHOOLS;
+      if (error || !data || data.length === 0) return DEMO_SCHOOLS;
+      return data;
     },
     enabled: !!profile,
   });

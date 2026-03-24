@@ -120,44 +120,36 @@ export default function ManageUsersPage() {
     mutationFn: async (values: InviteValues) => {
       if (isDemoMode || !configured) {
         await new Promise(res => setTimeout(res, 600));
-        return;
+        return { full_name: values.full_name, email: values.email, role: values.role };
       }
-      // In production: use Supabase Admin API to create user
-      // For now, create profile (user must self-register)
-      const tempPassword = `EduTrack${Math.random().toString(36).slice(2, 10)}!`;
-      const { data: authUser, error: authError } = await supabase.auth.admin.createUser({
+      // Insert a pre-registration record into profiles.
+      // The user will need to sign up at the login page with this email.
+      // On sign-up, the auth trigger will link their auth.users row to this profile.
+      const { error } = await supabase.from("profiles").insert({
+        id: crypto.randomUUID(),
+        full_name: values.full_name,
         email: values.email,
-        password: tempPassword,
-        user_metadata: {
-          full_name: values.full_name,
-          role: values.role,
-        },
+        phone: values.phone || null,
+        role: values.role,
+        client_id: values.client_id || profile?.client_id,
+        school_id: values.school_id || null,
       });
-      if (authError) throw authError;
-      if (authUser?.user) {
-        const { error: profileError } = await supabase.from("profiles").upsert({
-          id: authUser.user.id,
-          full_name: values.full_name,
-          email: values.email,
-          phone: values.phone || null,
-          role: values.role,
-          client_id: values.client_id || profile?.client_id,
-          school_id: values.school_id || null,
-        });
-        if (profileError) throw profileError;
-      }
+      if (error) throw error;
+      return { full_name: values.full_name, email: values.email, role: values.role };
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      const email = data?.email || form.getValues("email");
+      const name = data?.full_name || form.getValues("full_name");
       toast({
-        title: "User invited",
-        description: `An invitation has been sent to ${form.getValues("email")}.`,
+        title: "User added successfully",
+        description: `${name} (${email}) has been added. They will need to sign up at the login page using this email address.`,
       });
       setDialogOpen(false);
       form.reset();
       queryClient.invalidateQueries({ queryKey: ["manage-users"] });
     },
     onError: (err: Error) => {
-      toast({ title: "Failed to invite user", description: err.message, variant: "destructive" });
+      toast({ title: "Failed to add user", description: err.message, variant: "destructive" });
     },
   });
 
@@ -398,7 +390,7 @@ export default function ManageUsersPage() {
                   disabled={inviteMutation.isPending}
                   data-testid="button-send-invite"
                 >
-                  {inviteMutation.isPending ? "Sending…" : "Send Invitation"}
+                  {inviteMutation.isPending ? "Adding…" : "Add User"}
                 </Button>
               </DialogFooter>
             </form>
