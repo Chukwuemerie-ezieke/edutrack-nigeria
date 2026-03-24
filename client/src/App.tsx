@@ -73,25 +73,12 @@ function AuthenticatedApp({ dark, setDark }: { dark: boolean; setDark: (v: (p: b
 
   // Show login page
   if (location === "/login") {
-    return (
-      <Router hook={useHashLocation}>
-        <Switch>
-          <Route path="/login" component={LoginPage} />
-        </Switch>
-      </Router>
-    );
+    return <LoginPage />;
   }
 
   // In production mode, require login
   if (!isDemoMode && !loading && !profile) {
-    return (
-      <Router hook={useHashLocation}>
-        <Switch>
-          <Route path="/login" component={LoginPage} />
-          <Route component={LoginPage} />
-        </Switch>
-      </Router>
-    );
+    return <LoginPage />;
   }
 
   const sidebarStyle = {
@@ -100,50 +87,50 @@ function AuthenticatedApp({ dark, setDark }: { dark: boolean; setDark: (v: (p: b
   };
 
   return (
-    <SidebarProvider style={sidebarStyle as React.CSSProperties}>
-      <div className="flex h-screen w-full overflow-hidden">
-        <AppSidebar />
-        <div className="flex flex-col flex-1 min-w-0">
-          <header className="flex items-center justify-between px-4 py-2 border-b border-border bg-background/95 backdrop-blur-sm h-12 flex-shrink-0 z-10">
-            <div className="flex items-center gap-3">
-              <SidebarTrigger data-testid="button-sidebar-toggle" className="h-8 w-8" />
-              <span className="text-sm text-muted-foreground hidden sm:block">
-                School Operational Excellence Dashboard
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              {isDemoMode && (
-                <Badge variant="outline" className="text-amber-600 border-amber-300 bg-amber-50 dark:bg-amber-950/40 text-xs hidden sm:flex items-center gap-1">
-                  <Zap className="h-3 w-3" />
-                  Demo Mode
-                </Badge>
-              )}
-              {!isDemoMode && profile && (
-                <span className="text-xs text-muted-foreground hidden md:block">
-                  Connected · {profile.client_id ? "Live Data" : ""}
+    <Router hook={useHashLocation}>
+      <SidebarProvider style={sidebarStyle as React.CSSProperties}>
+        <div className="flex h-screen w-full overflow-hidden">
+          <AppSidebar />
+          <div className="flex flex-col flex-1 min-w-0">
+            <header className="flex items-center justify-between px-4 py-2 border-b border-border bg-background/95 backdrop-blur-sm h-12 flex-shrink-0 z-10">
+              <div className="flex items-center gap-3">
+                <SidebarTrigger data-testid="button-sidebar-toggle" className="h-8 w-8" />
+                <span className="text-sm text-muted-foreground hidden sm:block">
+                  School Operational Excellence Dashboard
                 </span>
-              )}
-              {isDemoMode && (
-                <span className="text-xs text-muted-foreground hidden md:block">
-                  Live Data · UBEC NPA 2022/23 + World Bank
-                </span>
-              )}
-              <ThemeToggle dark={dark} onToggle={() => setDark(d => !d)} />
-            </div>
-          </header>
+              </div>
+              <div className="flex items-center gap-2">
+                {isDemoMode && (
+                  <Badge variant="outline" className="text-amber-600 border-amber-300 bg-amber-50 dark:bg-amber-950/40 text-xs hidden sm:flex items-center gap-1">
+                    <Zap className="h-3 w-3" />
+                    Demo Mode
+                  </Badge>
+                )}
+                {!isDemoMode && profile && (
+                  <span className="text-xs text-muted-foreground hidden md:block">
+                    Connected · {profile.client_id ? "Live Data" : ""}
+                  </span>
+                )}
+                {isDemoMode && (
+                  <span className="text-xs text-muted-foreground hidden md:block">
+                    Live Data · UBEC NPA 2022/23 + World Bank
+                  </span>
+                )}
+                <ThemeToggle dark={dark} onToggle={() => setDark(d => !d)} />
+              </div>
+            </header>
 
-          <LiveFeedBanner />
+            <LiveFeedBanner />
 
-          <main className="flex-1 overflow-y-auto">
-            <Router hook={useHashLocation}>
+            <main className="flex-1 overflow-y-auto">
               <AppRouter />
-            </Router>
-          </main>
+            </main>
 
-          <PerplexityAttribution />
+            <PerplexityAttribution />
+          </div>
         </div>
-      </div>
-    </SidebarProvider>
+      </SidebarProvider>
+    </Router>
   );
 }
 
