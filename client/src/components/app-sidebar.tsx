@@ -16,6 +16,10 @@ import {
   Shield,
   LogOut,
   ChevronRight,
+  FileBarChart,
+  PackagePlus,
+  GraduationCap,
+  Bell,
 } from "lucide-react";
 import {
   Sidebar,
@@ -49,8 +53,9 @@ const CORE_NAV: NavItem[] = [
 
 // Data entry — role-gated
 const ENTRY_NAV: NavItem[] = [
-  { title: "Log Attendance", url: "/log-attendance", icon: ClipboardEdit, minRole: "head_teacher" },
-  { title: "Log Visit",      url: "/log-visit",       icon: MapPinPlus,   minRole: "sso"          },
+  { title: "Log Attendance",    url: "/log-attendance",    icon: ClipboardEdit, minRole: "head_teacher" },
+  { title: "Log Visit",         url: "/log-visit",          icon: MapPinPlus,    minRole: "sso"         },
+  { title: "Resource Requests", url: "/resource-requests", icon: PackagePlus,   minRole: "head_teacher" },
 ];
 
 // Analytics — subeb_admin and above
@@ -60,6 +65,8 @@ const ANALYTICS_NAV: NavItem[] = [
   { title: "Resources",           url: "/resources",    icon: Package,        minRole: "subeb_admin" },
   { title: "Readiness",           url: "/readiness",    icon: ClipboardCheck, minRole: "subeb_admin" },
   { title: "Data Sources",        url: "/data-sources", icon: Database,       minRole: "subeb_admin" },
+  { title: "Reports",             url: "/reports",      icon: FileBarChart,   minRole: "subeb_admin" },
+  { title: "Exam Results",        url: "/exam-results", icon: GraduationCap,  minRole: "subeb_admin" },
 ];
 
 // Management — subeb_admin and above
@@ -67,6 +74,7 @@ const MANAGEMENT_NAV: NavItem[] = [
   { title: "Manage Schools", url: "/manage-schools", icon: Building2, minRole: "subeb_admin" },
   { title: "Manage Users",   url: "/manage-users",   icon: UserCog,   minRole: "super_admin" },
   { title: "Admin",          url: "/admin",          icon: Shield,    minRole: "super_admin" },
+  { title: "Alerts",         url: "/alerts",         icon: Bell,      minRole: "subeb_admin" },
 ];
 
 const ROLE_BADGE_COLORS: Record<UserRole, string> = {

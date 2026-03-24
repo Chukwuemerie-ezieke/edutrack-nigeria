@@ -28,7 +28,12 @@ import LogVisitPage from "@/pages/log-visit";
 import ManageSchoolsPage from "@/pages/manage-schools";
 import ManageUsersPage from "@/pages/manage-users";
 import AdminPage from "@/pages/admin";
+import ReportsPage from "@/pages/reports";
+import ResourceRequestsPage from "@/pages/resource-requests";
+import ExamResultsPage from "@/pages/exam-results";
+import AlertsPage from "@/pages/alerts";
 import { LiveFeedBanner } from "@/components/live-feed-banner";
+import { OfflineIndicator } from "@/components/offline-indicator";
 
 function ThemeToggle({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
   return (
@@ -62,6 +67,10 @@ function AppRouter() {
       <Route path="/manage-schools" component={ManageSchoolsPage} />
       <Route path="/manage-users" component={ManageUsersPage} />
       <Route path="/admin" component={AdminPage} />
+      <Route path="/reports" component={ReportsPage} />
+      <Route path="/resource-requests" component={ResourceRequestsPage} />
+      <Route path="/exam-results" component={ExamResultsPage} />
+      <Route path="/alerts" component={AlertsPage} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -121,6 +130,7 @@ function AuthenticatedApp({ dark, setDark }: { dark: boolean; setDark: (v: (p: b
             </header>
 
             <LiveFeedBanner />
+            <OfflineIndicator />
 
             <main className="flex-1 overflow-y-auto">
               <AppRouter />
