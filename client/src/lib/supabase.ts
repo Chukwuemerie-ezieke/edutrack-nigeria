@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://hflzmhjqeqgqsivlddem.supabase.co';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_GUuLt8pcoXYTDO5OnzBQyQ_nsABbmFS';
 
 // In-memory storage to avoid localStorage (blocked in sandboxed iframes)
 const memoryStorage: Record<string, string> = {};
@@ -22,7 +22,5 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 
 // Check if Supabase is actually configured (not placeholder)
 export function isSupabaseConfigured(): boolean {
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
-  return !!(url && key && url !== 'https://placeholder.supabase.co' && key !== 'placeholder-key');
+  return supabaseUrl.includes('supabase.co') && supabaseUrl !== 'https://placeholder.supabase.co';
 }
