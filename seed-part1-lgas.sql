@@ -11,6 +11,7 @@ DELETE FROM lgas;
 DELETE FROM clients WHERE id = '00000000-0000-0000-0000-000000000001';
 
 INSERT INTO clients (id, name, state, contact_name, contact_email, plan, max_schools)
+VALUES ('00000000-0000-0000-0000-000000000001', 'EduTrack Nigeria (National Demo)', 'National', 'Chukwuemerie Ezieke', 'eziekechukwuemerie@gmail.com', 'enterprise', 500);
 
 INSERT INTO lgas (id, client_id, name, state) VALUES ('d6d7351b-08bd-b47b-3e89-091834d854e9', '00000000-0000-0000-0000-000000000001', 'Barkin Ladi', 'Plateau');
 INSERT INTO lgas (id, client_id, name, state) VALUES ('37937d77-5b37-ce40-2333-05f4ed099929', '00000000-0000-0000-0000-000000000001', 'Bassa', 'Plateau');
