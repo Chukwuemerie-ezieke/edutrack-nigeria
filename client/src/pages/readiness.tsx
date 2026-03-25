@@ -42,8 +42,8 @@ export default function Readiness() {
         {[
           { label: "National Avg Score", value: "67/100", note: "Up from 52 in 2019" },
           { label: "Highest State", value: "82", note: "Anambra" },
-          { label: "Lowest State", value: "51", note: "Jigawa" },
-          { label: "YoY Improvement", value: "+4.0 pts", note: "Average across 6 states", good: true },
+          { label: "Lowest State", value: "45", note: "Borno" },
+          { label: "YoY Improvement", value: "+4.0 pts", note: "Average across 12 states", good: true },
         ].map((m) => (
           <Card key={m.label} className="border border-border">
             <CardContent className="pt-4">

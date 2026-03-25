@@ -50,6 +50,9 @@ const DEMO_SCHOOLS = [
   { id: "d3", name: "St. Joseph's Primary School", lga_name: "Nnewi North", school_type: "private", level: "primary", total_students: 312, total_teachers: 11, active: true },
   { id: "d4", name: "Aguata Basic School", lga_name: "Aguata", school_type: "public", level: "eccde", total_students: 145, total_teachers: 5, active: true },
   { id: "d5", name: "Ekwusigo Community JSS", lga_name: "Ekwusigo", school_type: "public", level: "jss", total_students: 289, total_teachers: 9, active: false },
+  { id: "d6", name: "Government Junior Secondary School Awka", lga_name: "Awka South", school_type: "public", level: "jss", total_students: 356, total_teachers: 12, active: true },
+  { id: "d7", name: "Community Senior Secondary School Onitsha", lga_name: "Onitsha North", school_type: "public", level: "sss", total_students: 445, total_teachers: 16, active: true },
+  { id: "d8", name: "Model ECCDE Centre Nnewi", lga_name: "Nnewi North", school_type: "public", level: "eccde", total_students: 85, total_teachers: 4, active: true },
 ];
 
 const DEMO_LGAS = [

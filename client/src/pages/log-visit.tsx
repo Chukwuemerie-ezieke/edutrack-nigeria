@@ -70,6 +70,8 @@ const DEMO_SCHOOLS = [
   { id: "demo-2", name: "Community School Onitsha Central", lga: "Onitsha North" },
   { id: "demo-3", name: "St. Joseph Primary School Nnewi", lga: "Nnewi North" },
   { id: "demo-4", name: "Aguata Basic School", lga: "Aguata" },
+  { id: "demo-6", name: "Government JSS Awka", lga: "Awka South" },
+  { id: "demo-7", name: "Community SSS Onitsha", lga: "Onitsha North" },
 ];
 
 // Demo recent visits

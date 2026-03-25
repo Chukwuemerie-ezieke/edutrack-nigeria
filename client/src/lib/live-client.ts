@@ -101,9 +101,10 @@ export async function fetchWorldBank(): Promise<WorldBankResponse> {
 }
 
 // ─── Attendance simulation (identical to server) ─────────────────────────────
-const STATES = ["Kano", "Kaduna", "Jigawa", "Edo", "Lagos", "Ogun"];
+const STATES = ["Kano", "Kaduna", "Lagos", "Oyo", "Anambra", "Enugu", "Edo", "Rivers", "Bauchi", "Borno", "Plateau", "Kwara"];
 const BASE_RATES: Record<string, number> = {
-  Kano: 81.2, Kaduna: 79.5, Jigawa: 77.8, Edo: 85.4, Lagos: 83.1, Ogun: 80.9,
+  Kano: 71.2, Kaduna: 73.5, Lagos: 83.1, Oyo: 79.4, Anambra: 85.3, Enugu: 84.1,
+  Edo: 81.9, Rivers: 82.5, Bauchi: 68.4, Borno: 64.8, Plateau: 76.3, Kwara: 78.9,
 };
 const BASE_STUDENT_COUNT = 23000;
 
@@ -205,13 +206,13 @@ export function getVisits(): VisitsResponse {
     : Math.floor(visitsTodaySeed % 8) + 2;
   const monthTotal = 847 + (dayOfYear % 15) * 8 + Math.floor(seededRandom(window30 * 3) * 5);
   const activities = ["Lesson Observation", "Coaching Session", "HT Interview", "Enrollment Check", "Infrastructure Audit"];
-  const stateList = ["Kano", "Kaduna", "Jigawa"];
+  const stateList = ["Kano", "Kaduna", "Lagos", "Oyo", "Anambra", "Enugu", "Edo", "Rivers", "Bauchi", "Borno", "Plateau", "Kwara"];
 
   const recentVisits: VisitEntry[] = Array.from({ length: 10 }, (_, i) => {
     const seed = window30 - i;
     const school = SCHOOLS[Math.floor(seededRandom(seed * 11) * SCHOOLS.length)];
     const lga = LGAS[Math.floor(seededRandom(seed * 13) * LGAS.length)];
-    const state = stateList[Math.floor(seededRandom(seed * 17) * 3)];
+    const state = stateList[Math.floor(seededRandom(seed * 17) * stateList.length)];
     const sso = SSO_NAMES[Math.floor(seededRandom(seed * 19) * SSO_NAMES.length)];
     const coords = GPS_COORDS[Math.floor(seededRandom(seed * 23) * GPS_COORDS.length)];
     const activity = activities[Math.floor(seededRandom(seed * 29) * activities.length)];

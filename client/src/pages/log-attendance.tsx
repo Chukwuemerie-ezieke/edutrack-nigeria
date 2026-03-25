@@ -70,7 +70,7 @@ export default function LogAttendancePage() {
     queryKey: ["school", profile?.school_id],
     queryFn: async () => {
       if (isDemoMode || !configured) {
-        return { id: "demo-school", name: "Government Primary School Awka", total_students: 420, total_teachers: 14 };
+        return { id: "demo-school", name: "Demo School (All Levels)", total_students: 420, total_teachers: 14 };
       }
       if (!profile?.school_id) return null;
       const { data } = await supabase

@@ -1,16 +1,34 @@
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/auth-context";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import {
   Shield, Building, School, Users, ClipboardList, MapPin, Plus, ArrowUpRight
 } from "lucide-react";
+
+const NIGERIAN_STATES = [
+  "Abia","Adamawa","Akwa Ibom","Anambra","Bauchi","Bayelsa","Benue","Borno",
+  "Cross River","Delta","Ebonyi","Edo","Ekiti","Enugu","FCT","Gombe","Imo",
+  "Jigawa","Kaduna","Kano","Katsina","Kebbi","Kogi","Kwara","Lagos","Nasarawa",
+  "Niger","Ogun","Ondo","Osun","Oyo","Plateau","Rivers","Sokoto","Taraba",
+  "Yobe","Zamfara",
+];
 
 const DEMO_CLIENTS = [
   { id: "c1", name: "Anambra State SUBEB", state: "Anambra", plan: "enterprise", schools: 48, last_activity: "Today", compliance_rate: 87 },
@@ -71,6 +89,13 @@ function KpiCard({
 export default function AdminPage() {
   const { profile, isDemoMode } = useAuth();
   const configured = isSupabaseConfigured();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [showAddClient, setShowAddClient] = useState(false);
+  const [newClient, setNewClient] = useState({
+    name: "", state: "", contact_name: "", contact_email: "", contact_phone: "",
+    plan: "pilot", max_schools: 30,
+  });
 
   // Fetch all clients
   const { data: clients, isLoading: clientsLoading } = useQuery({
@@ -110,6 +135,38 @@ export default function AdminPage() {
     enabled: !!profile,
   });
 
+  const addClientMutation = useMutation({
+    mutationFn: async () => {
+      if (isDemoMode || !configured) {
+        await new Promise(res => setTimeout(res, 600));
+        return;
+      }
+      const { error } = await supabase.from("clients").insert({
+        name: newClient.name,
+        state: newClient.state,
+        contact_name: newClient.contact_name || null,
+        contact_email: newClient.contact_email || null,
+        contact_phone: newClient.contact_phone || null,
+        plan: newClient.plan,
+        max_schools: newClient.max_schools,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Client added" + (isDemoMode ? " (demo mode)" : ""),
+        description: `${newClient.name} has been added successfully.`,
+      });
+      setShowAddClient(false);
+      setNewClient({ name: "", state: "", contact_name: "", contact_email: "", contact_phone: "", plan: "pilot", max_schools: 30 });
+      queryClient.invalidateQueries({ queryKey: ["admin-clients"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-kpis"] });
+    },
+    onError: (err: Error) => {
+      toast({ title: "Failed to add client", description: err.message, variant: "destructive" });
+    },
+  });
+
   const displayKpis = kpis || DEMO_KPIS;
   const displayClients = (clients as typeof DEMO_CLIENTS) || DEMO_CLIENTS;
 
@@ -136,6 +193,7 @@ export default function AdminPage() {
             size="sm"
             className="bg-[hsl(183_98%_22%)] hover:bg-[hsl(183_98%_18%)] text-white"
             data-testid="button-add-client"
+            onClick={() => setShowAddClient(true)}
           >
             <Plus className="h-3.5 w-3.5 mr-1.5" />
             Add Client
@@ -263,6 +321,102 @@ export default function AdminPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Add Client Dialog */}
+      <Dialog open={showAddClient} onOpenChange={setShowAddClient}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Add New Client</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Client Name</Label>
+              <Input
+                placeholder="e.g. Anambra State SUBEB"
+                value={newClient.name}
+                onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
+                data-testid="input-client-name"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>State</Label>
+              <Select value={newClient.state} onValueChange={(v) => setNewClient({ ...newClient, state: v })}>
+                <SelectTrigger data-testid="select-client-state">
+                  <SelectValue placeholder="Select state" />
+                </SelectTrigger>
+                <SelectContent>
+                  {NIGERIAN_STATES.map((s) => (
+                    <SelectItem key={s} value={s}>{s}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Contact Name</Label>
+              <Input
+                placeholder="Full name"
+                value={newClient.contact_name}
+                onChange={(e) => setNewClient({ ...newClient, contact_name: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Contact Email</Label>
+              <Input
+                type="email"
+                placeholder="email@example.com"
+                value={newClient.contact_email}
+                onChange={(e) => setNewClient({ ...newClient, contact_email: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Contact Phone</Label>
+              <Input
+                placeholder="+234..."
+                value={newClient.contact_phone}
+                onChange={(e) => setNewClient({ ...newClient, contact_phone: e.target.value })}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label>Plan</Label>
+                <Select value={newClient.plan} onValueChange={(v) => setNewClient({ ...newClient, plan: v })}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pilot">Pilot</SelectItem>
+                    <SelectItem value="standard">Standard</SelectItem>
+                    <SelectItem value="enterprise">Enterprise</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Max Schools</Label>
+                <Input
+                  type="number"
+                  min="1"
+                  value={newClient.max_schools}
+                  onChange={(e) => setNewClient({ ...newClient, max_schools: parseInt(e.target.value) || 30 })}
+                  className="font-mono"
+                />
+              </div>
+            </div>
+          </div>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setShowAddClient(false)}>
+              Cancel
+            </Button>
+            <Button
+              className="bg-[hsl(183_98%_22%)] hover:bg-[hsl(183_98%_18%)] text-white"
+              disabled={!newClient.name || !newClient.state || addClientMutation.isPending}
+              onClick={() => addClientMutation.mutate()}
+              data-testid="button-save-client"
+            >
+              {addClientMutation.isPending ? "Adding..." : "Add Client"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

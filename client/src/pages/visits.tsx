@@ -71,8 +71,17 @@ function timeAgo(isoTs: string): string {
 function LiveVisitLog({ visits, isLoading }: { visits: VisitEntry[] | undefined; isLoading: boolean }) {
   const stateColors: Record<string, string> = {
     Kano: "text-primary bg-primary/10",
-    Kaduna: "text-orange-700 bg-orange-100 dark:text-orange-300 dark:bg-orange-900/30",
-    Jigawa: "text-amber-700 bg-amber-100 dark:text-amber-300 dark:bg-amber-900/30",
+    Kaduna: "text-amber-700 bg-amber-100 dark:text-amber-300 dark:bg-amber-900/30",
+    Lagos: "text-blue-700 bg-blue-100 dark:text-blue-300 dark:bg-blue-900/30",
+    Oyo: "text-purple-700 bg-purple-100 dark:text-purple-300 dark:bg-purple-900/30",
+    Anambra: "text-emerald-700 bg-emerald-100 dark:text-emerald-300 dark:bg-emerald-900/30",
+    Enugu: "text-teal-700 bg-teal-100 dark:text-teal-300 dark:bg-teal-900/30",
+    Edo: "text-orange-700 bg-orange-100 dark:text-orange-300 dark:bg-orange-900/30",
+    Rivers: "text-cyan-700 bg-cyan-100 dark:text-cyan-300 dark:bg-cyan-900/30",
+    Bauchi: "text-red-700 bg-red-100 dark:text-red-300 dark:bg-red-900/30",
+    Borno: "text-rose-700 bg-rose-100 dark:text-rose-300 dark:bg-rose-900/30",
+    Plateau: "text-indigo-700 bg-indigo-100 dark:text-indigo-300 dark:bg-indigo-900/30",
+    Kwara: "text-lime-700 bg-lime-100 dark:text-lime-300 dark:bg-lime-900/30",
   };
 
   if (isLoading) {
@@ -145,37 +154,41 @@ function LiveVisitLog({ visits, isLoading }: { visits: VisitEntry[] | undefined;
 }
 
 function MapPlaceholder() {
+  const zones = [
+    { label: "North West", color: "hsl(183, 98%, 22%)", x: 60, y: 40, w: 130, h: 80, states: "Kano · Kaduna" },
+    { label: "North East", color: "hsl(20, 73%, 34%)", x: 220, y: 40, w: 130, h: 80, states: "Bauchi · Borno" },
+    { label: "North Central", color: "hsl(43, 74%, 49%)", x: 380, y: 40, w: 130, h: 80, states: "Plateau · Kwara" },
+    { label: "South West", color: "hsl(210, 60%, 40%)", x: 60, y: 140, w: 130, h: 80, states: "Lagos · Oyo" },
+    { label: "South East", color: "hsl(103, 56%, 31%)", x: 220, y: 140, w: 130, h: 80, states: "Anambra · Enugu" },
+    { label: "South South", color: "hsl(0, 50%, 40%)", x: 380, y: 140, w: 130, h: 80, states: "Edo · Rivers" },
+  ];
   return (
     <div className="relative rounded-lg border border-border overflow-hidden bg-muted/40" style={{ height: 260 }}>
-      <svg viewBox="0 0 600 260" className="w-full h-full" aria-label="GPS visit distribution map">
-        <rect width="600" height="260" fill="hsl(var(--muted))" />
-        <text x="300" y="24" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="12" fontFamily="sans-serif" fontWeight="500">
-          GPS Visit Distribution — Kano, Kaduna & Jigawa States
+      <svg viewBox="0 0 570 260" className="w-full h-full" aria-label="GPS visit distribution map">
+        <rect width="570" height="260" fill="hsl(var(--muted))" />
+        <text x="285" y="22" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="12" fontFamily="sans-serif" fontWeight="500">
+          GPS Visit Distribution — 12 States across 6 Geopolitical Zones
         </text>
-        <rect x="60" y="50" width="140" height="150" rx="8" fill="hsl(183, 98%, 22%)" opacity="0.12" stroke="hsl(183, 98%, 22%)" strokeWidth="1.5" />
-        <text x="130" y="132" textAnchor="middle" fill="hsl(183, 98%, 22%)" fontSize="13" fontWeight="600">Kano</text>
-        <text x="130" y="148" textAnchor="middle" fill="hsl(183, 98%, 22%)" fontSize="10">542 visits · 75%</text>
-        <rect x="240" y="60" width="130" height="140" rx="8" fill="hsl(20, 73%, 34%)" opacity="0.12" stroke="hsl(20, 73%, 34%)" strokeWidth="1.5" />
-        <text x="305" y="132" textAnchor="middle" fill="hsl(20, 73%, 34%)" fontSize="13" fontWeight="600">Kaduna</text>
-        <text x="305" y="148" textAnchor="middle" fill="hsl(20, 73%, 34%)" fontSize="10">498 visits · 78%</text>
-        <rect x="410" y="70" width="130" height="130" rx="8" fill="hsl(43, 74%, 49%)" opacity="0.12" stroke="hsl(43, 74%, 49%)" strokeWidth="1.5" />
-        <text x="475" y="137" textAnchor="middle" fill="hsl(43, 74%, 49%)" fontSize="13" fontWeight="600">Jigawa</text>
-        <text x="475" y="153" textAnchor="middle" fill="hsl(43, 74%, 49%)" fontSize="10">482 visits · 79%</text>
-        {[[80,65],[95,90],[110,75],[125,110],[140,85],[155,120],[170,95],[90,130],[130,145],[160,160],[105,165],[85,150],[145,170]].map(([x,y],i) => (
-          <circle key={i} cx={x} cy={y} r="4" fill="hsl(183, 98%, 22%)" opacity="0.7" />
+        {zones.map((z, i) => (
+          <g key={i}>
+            <rect x={z.x} y={z.y} width={z.w} height={z.h} rx="6" fill={z.color} opacity="0.12" stroke={z.color} strokeWidth="1.5" />
+            <text x={z.x + z.w / 2} y={z.y + z.h / 2 - 8} textAnchor="middle" fill={z.color} fontSize="11" fontWeight="600">{z.label}</text>
+            <text x={z.x + z.w / 2} y={z.y + z.h / 2 + 8} textAnchor="middle" fill={z.color} fontSize="9">{z.states}</text>
+            {Array.from({ length: 6 }, (_, j) => (
+              <circle
+                key={j}
+                cx={z.x + 15 + (j % 3) * (z.w - 30) / 2}
+                cy={z.y + 18 + Math.floor(j / 3) * (z.h - 36)}
+                r="3"
+                fill={z.color}
+                opacity="0.6"
+              />
+            ))}
+          </g>
         ))}
-        {[[255,75],[270,95],[290,80],[310,105],[330,90],[350,115],[270,130],[310,145],[345,130],[260,155],[300,160],[340,145]].map(([x,y],i) => (
-          <circle key={i} cx={x} cy={y} r="4" fill="hsl(20, 73%, 34%)" opacity="0.7" />
-        ))}
-        {[[425,85],[445,100],[465,90],[485,110],[505,95],[425,130],[455,140],[490,120],[510,135],[435,155],[475,160],[505,148]].map(([x,y],i) => (
-          <circle key={i} cx={x} cy={y} r="4" fill="hsl(43, 74%, 49%)" opacity="0.7" />
-        ))}
-        <circle cx="70" cy="235" r="4" fill="hsl(183, 98%, 22%)" />
-        <text x="80" y="239" fill="hsl(var(--muted-foreground))" fontSize="10">Kano visit</text>
-        <circle cx="150" cy="235" r="4" fill="hsl(20, 73%, 34%)" />
-        <text x="160" y="239" fill="hsl(var(--muted-foreground))" fontSize="10">Kaduna visit</text>
-        <circle cx="240" cy="235" r="4" fill="hsl(43, 74%, 49%)" />
-        <text x="250" y="239" fill="hsl(var(--muted-foreground))" fontSize="10">Jigawa visit</text>
+        <text x="285" y="245" textAnchor="middle" fill="hsl(var(--muted-foreground))" fontSize="10">
+          Visit locations across 12 monitored states · 2 per geopolitical zone
+        </text>
       </svg>
     </div>
   );
@@ -201,7 +214,7 @@ export default function Visits() {
         <div>
           <h1 className="text-xl font-bold text-foreground">School Support Visits</h1>
           <p className="text-sm text-muted-foreground mt-0.5">
-            GPS-enabled SSO visit tracking — Kano, Kaduna, and Jigawa states
+            GPS-enabled SSO visit tracking across 12 monitored states
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -309,7 +322,7 @@ export default function Visits() {
         <Card className="border border-border">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold">GPS Visit Distribution</CardTitle>
-            <p className="text-xs text-muted-foreground">Geo-tagged school support visits across 3 states</p>
+            <p className="text-xs text-muted-foreground">Geo-tagged school support visits across 12 states</p>
           </CardHeader>
           <CardContent>
             <MapPlaceholder />

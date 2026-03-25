@@ -280,7 +280,7 @@ export default function Overview() {
         <KpiCard
           title="Total Teachers"
           value={fmt(NATIONAL_OVERVIEW.totalTeachers)}
-          sub="Qualified: 72.3% primary"
+          sub="Qualified: 72.3% (all levels)"
           icon={UserCheck}
           data-testid="kpi-total-teachers"
         />
@@ -296,7 +296,7 @@ export default function Overview() {
         <KpiCard
           title="Visits Today"
           value={visitsData ? String(animatedVisitsToday) : fmtFull(NATIONAL_OVERVIEW.schoolVisitsThisMonth)}
-          sub={visitsData ? `${animatedMonthTotal.toLocaleString()} this month` : "77% coverage (3 states)"}
+          sub={visitsData ? `${animatedMonthTotal.toLocaleString()} this month` : "77% coverage (12 states)"}
           icon={MapPin}
           trend={{ value: "Live tracking", up: true }}
           live={!!visitsData}
@@ -568,7 +568,7 @@ export default function Overview() {
       <Card className="border border-border">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-semibold">Focus States — Key Indicators</CardTitle>
-          <p className="text-xs text-muted-foreground">6 priority states under EduTrack monitoring programme</p>
+          <p className="text-xs text-muted-foreground">12 priority states under EduTrack monitoring programme — 2 per geopolitical zone</p>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
