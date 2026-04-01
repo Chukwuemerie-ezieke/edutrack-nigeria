@@ -1,0 +1,13 @@
+{
+  "name": "EduTrack Nigeria",
+  "short_name": "EduTrack",
+  "description": "School Operational Excellence Dashboard",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#01696F",
+  "theme_color": "#01696F",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
