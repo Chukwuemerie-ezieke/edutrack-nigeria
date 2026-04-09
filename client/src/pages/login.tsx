@@ -77,6 +77,7 @@ export default function LoginPage() {
   const getRedirectPath = (role: string) => {
     switch (role) {
       case "head_teacher": return "/log-attendance";
+      case "principal": return "/log-attendance";
       case "sso": return "/log-visit";
       default: return "/";
     }

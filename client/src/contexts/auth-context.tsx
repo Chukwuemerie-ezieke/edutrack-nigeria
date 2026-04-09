@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import { User, Session } from "@supabase/supabase-js";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
-export type UserRole = "super_admin" | "subeb_admin" | "head_teacher" | "sso" | "teacher";
+export type UserRole = "super_admin" | "subeb_admin" | "head_teacher" | "principal" | "sso" | "teacher";
 
 export interface UserProfile {
   id: string;
@@ -147,6 +147,7 @@ export const ROLE_LEVELS: Record<UserRole, number> = {
   teacher: 1,
   sso: 2,
   head_teacher: 3,
+  principal: 3,
   subeb_admin: 4,
   super_admin: 5,
 };
