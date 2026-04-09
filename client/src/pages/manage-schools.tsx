@@ -29,7 +29,7 @@ const schoolSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   lga_id: z.string().optional(),
   school_type: z.enum(["public", "private"]),
-  level: z.enum(["eccde", "primary", "jss", "sss"]),
+  level: z.enum(["eccde", "primary", "jss", "sss", "secondary"]),
   address: z.string().optional(),
   gps_lat: z.coerce.number().optional(),
   gps_lng: z.coerce.number().optional(),
@@ -68,6 +68,7 @@ const LEVEL_LABELS: Record<string, string> = {
   primary: "Primary",
   jss: "JSS",
   sss: "SSS",
+  secondary: "Secondary (JSS+SSS)",
 };
 
 export default function ManageSchoolsPage() {
@@ -194,7 +195,7 @@ export default function ManageSchoolsPage() {
     form.reset({
       name: school.name,
       school_type: school.school_type as "public" | "private",
-      level: school.level as "eccde" | "primary" | "jss" | "sss",
+      level: school.level as "eccde" | "primary" | "jss" | "sss" | "secondary",
       total_students: school.total_students,
       total_teachers: school.total_teachers,
       has_fence: false,
@@ -424,8 +425,9 @@ export default function ManageSchoolsPage() {
                       <SelectContent>
                         <SelectItem value="eccde">ECCDE</SelectItem>
                         <SelectItem value="primary">Primary</SelectItem>
-                        <SelectItem value="jss">JSS</SelectItem>
-                        <SelectItem value="sss">SSS</SelectItem>
+                        <SelectItem value="jss">JSS (Junior Secondary)</SelectItem>
+                        <SelectItem value="sss">SSS (Senior Secondary)</SelectItem>
+                        <SelectItem value="secondary">Secondary (JSS + SSS)</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
