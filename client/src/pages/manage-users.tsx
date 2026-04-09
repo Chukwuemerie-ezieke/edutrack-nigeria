@@ -28,7 +28,7 @@ const inviteSchema = z.object({
   full_name: z.string().min(2, "Name is required"),
   email: z.string().email("Valid email required"),
   phone: z.string().optional(),
-  role: z.enum(["super_admin", "subeb_admin", "head_teacher", "principal", "sso", "teacher"]),
+  role: z.enum(["super_admin", "subeb_admin", "aeo", "head_teacher", "principal", "sso", "teacher"]),
   client_id: z.string().optional(),
   school_id: z.string().optional(),
 });
@@ -47,6 +47,7 @@ const ROLE_COLORS: Record<string, string> = {
   subeb_admin: "text-blue-700 border-blue-300 bg-blue-50 dark:bg-blue-950/40",
   head_teacher: "text-teal-700 border-teal-300 bg-teal-50 dark:bg-teal-950/40",
   principal:    "text-teal-700 border-teal-300 bg-teal-50 dark:bg-teal-950/40",
+  aeo:          "text-indigo-700 border-indigo-300 bg-indigo-50 dark:bg-indigo-950/40",
   sso: "text-orange-700 border-orange-300 bg-orange-50 dark:bg-orange-950/40",
   teacher: "text-gray-700 border-gray-300 bg-gray-50 dark:bg-gray-950/40",
 };
@@ -323,6 +324,7 @@ export default function ManageUsersPage() {
                         <SelectItem value="subeb_admin">SUBEB Admin</SelectItem>
                         <SelectItem value="head_teacher">Head Teacher</SelectItem>
                         <SelectItem value="principal">Principal</SelectItem>
+                        <SelectItem value="aeo">Area Education Officer (AEO)</SelectItem>
                         <SelectItem value="sso">SSO</SelectItem>
                         <SelectItem value="teacher">Teacher</SelectItem>
                       </SelectContent>

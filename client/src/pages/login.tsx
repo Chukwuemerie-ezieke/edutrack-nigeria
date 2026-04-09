@@ -78,6 +78,7 @@ export default function LoginPage() {
     switch (role) {
       case "head_teacher": return "/log-attendance";
       case "principal": return "/log-attendance";
+      case "aeo": return "/";
       case "sso": return "/log-visit";
       default: return "/";
     }
