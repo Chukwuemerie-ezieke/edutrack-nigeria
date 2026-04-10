@@ -29,37 +29,11 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 function EduTrackFullLogo() {
   return (
-    <svg
-      aria-label="EduTrack Nigeria"
-      viewBox="0 0 48 48"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-12 w-12"
-    >
-      <path
-        d="M24 2L42 12V36L24 46L6 36V12L24 2Z"
-        fill="hsl(183 60% 22%)"
-        opacity="0.3"
-      />
-      <path
-        d="M24 4L40 13.5V34.5L24 44L8 34.5V13.5L24 4Z"
-        stroke="hsl(183 60% 45%)"
-        strokeWidth="1.5"
-        fill="none"
-      />
-      <text
-        x="24"
-        y="29"
-        textAnchor="middle"
-        fontFamily="'General Sans', sans-serif"
-        fontWeight="700"
-        fontSize="14"
-        fill="hsl(183 60% 75%)"
-        letterSpacing="-0.5"
-      >
-        ET
-      </text>
-    </svg>
+    <img
+      src="/logo.png"
+      alt="EduTrack Nigeria"
+      className="h-16 w-16 object-contain"
+    />
   );
 }
 
