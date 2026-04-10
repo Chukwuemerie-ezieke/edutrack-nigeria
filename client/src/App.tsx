@@ -28,6 +28,7 @@ import LogVisitPage from "@/pages/log-visit";
 import ManageSchoolsPage from "@/pages/manage-schools";
 import ManageUsersPage from "@/pages/manage-users";
 import AdminPage from "@/pages/admin";
+import MySchoolPage from "@/pages/my-school";
 import ReportsPage from "@/pages/reports";
 import ResourceRequestsPage from "@/pages/resource-requests";
 import ExamResultsPage from "@/pages/exam-results";
@@ -66,6 +67,7 @@ function AppRouter() {
       <Route path="/log-visit" component={LogVisitPage} />
       <Route path="/manage-schools" component={ManageSchoolsPage} />
       <Route path="/manage-users" component={ManageUsersPage} />
+      <Route path="/my-school" component={MySchoolPage} />
       <Route path="/admin" component={AdminPage} />
       <Route path="/reports" component={ReportsPage} />
       <Route path="/resource-requests" component={ResourceRequestsPage} />

@@ -161,7 +161,9 @@ export function hasRole(userRole: UserRole | undefined, minRole: UserRole): bool
 export const ROLE_LABELS: Record<UserRole, string> = {
   super_admin: "Super Admin",
   subeb_admin: "SUBEB Admin",
+  aeo: "Area Education Officer",
   head_teacher: "Head Teacher",
+  principal: "Principal",
   sso: "SSO",
   teacher: "Teacher",
 };

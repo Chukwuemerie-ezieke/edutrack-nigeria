@@ -76,8 +76,8 @@ export default function LoginPage() {
 
   const getRedirectPath = (role: string) => {
     switch (role) {
-      case "head_teacher": return "/log-attendance";
-      case "principal": return "/log-attendance";
+      case "head_teacher": return "/my-school";
+      case "principal": return "/my-school";
       case "aeo": return "/";
       case "sso": return "/log-visit";
       default: return "/";
@@ -92,9 +92,10 @@ export default function LoginPage() {
       if (signInError) {
         setError(signInError);
       } else {
-        // Navigate based on role (we'll use profile after sign in)
-        // For demo mode, profile is already set to super_admin
-        navigate("/");
+        // Navigate based on role after sign in
+        // Profile is set by signIn; for demo mode it's super_admin
+        const role = profile?.role || "super_admin";
+        navigate(getRedirectPath(role));
       }
     } finally {
       setIsSubmitting(false);

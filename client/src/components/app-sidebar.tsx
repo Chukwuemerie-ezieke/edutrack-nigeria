@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { useHashLocation } from "wouter/use-hash-location";
 import {
   LayoutDashboard,
+  School,
   Users,
   MapPin,
   UserCheck,
@@ -43,6 +44,11 @@ interface NavItem {
   icon: React.ElementType;
   minRole?: UserRole;
 }
+
+// My School — shown for head_teacher, principal, and above (not in demo mode unless user has school_id)
+const MY_SCHOOL_NAV: NavItem[] = [
+  { title: "My School", url: "/my-school", icon: School, minRole: "head_teacher" },
+];
 
 // Items always shown (all roles in demo, or any logged-in user)
 const CORE_NAV: NavItem[] = [
@@ -207,6 +213,11 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent className="overflow-y-auto">
+        {/* My School — head_teacher/principal with school_id, or in demo mode for those roles */}
+        {(!isDemoMode && profile?.school_id && userRole && hasRole(userRole, "head_teacher")) && (
+          <NavGroup items={MY_SCHOOL_NAV} label="My School" userRole={userRole} isDemoMode={isDemoMode} />
+        )}
+
         {/* Core nav - always shown */}
         <NavGroup items={CORE_NAV} label="Dashboard" userRole={userRole} isDemoMode={isDemoMode} />
 

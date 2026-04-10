@@ -18,6 +18,7 @@ import {
 } from "@/lib/data";
 import { useLiveData } from "@/hooks/use-live-data";
 import { useDbData } from "@/hooks/use-db-data";
+import { useAuth, ROLE_LABELS } from "@/contexts/auth-context";
 import { useEffect, useRef, useState } from "react";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -192,6 +193,7 @@ export default function Overview() {
 
   // Database data (with demo fallback)
   const { isRealData, isDemoMode: isDemo, clientName, kpis } = useDbData();
+  const { profile } = useAuth();
 
   // Live data hooks
   const { data: wbData, isLoading: wbLoading, isFetching: wbFetching } =
@@ -258,6 +260,25 @@ export default function Overview() {
           )}
         </div>
       </div>
+
+      {/* Role-specific banner for principals/head teachers */}
+      {!isDemo && profile?.school_id && (profile.role === "head_teacher" || profile.role === "principal") && (
+        <div className="flex items-center gap-3 bg-[hsl(183_98%_22%)]/5 border border-[hsl(183_98%_22%)]/20 rounded-lg px-4 py-3">
+          <School className="h-5 w-5 text-[hsl(183_98%_22%)] flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-foreground">
+              Welcome, {profile.full_name} — {ROLE_LABELS[profile.role] || profile.role}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              View your school's attendance, teachers, and visits on the{" "}
+              <a href="/#/my-school" className="text-[hsl(183_98%_22%)] font-medium hover:underline">
+                My School
+              </a>{" "}
+              page.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
