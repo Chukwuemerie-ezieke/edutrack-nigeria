@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "@/contexts/auth-context";
+import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -92,10 +93,24 @@ export default function LoginPage() {
       if (signInError) {
         setError(signInError);
       } else {
-        // Navigate based on role after sign in
-        // Profile is set by signIn; for demo mode it's super_admin
-        const role = profile?.role || "super_admin";
-        navigate(getRedirectPath(role));
+        // Wait briefly for profile to load, then redirect based on role
+        // Profile fetch happens in auth context after signIn
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Re-fetch profile to get the role
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('role, school_id')
+          .eq('email', values.email)
+          .single();
+        const role = profileData?.role || profile?.role || "super_admin";
+        const hasSchool = !!profileData?.school_id;
+        if ((role === 'principal' || role === 'head_teacher') && hasSchool) {
+          navigate('/my-school');
+        } else if (role === 'sso') {
+          navigate('/log-visit');
+        } else {
+          navigate('/');
+        }
       }
     } finally {
       setIsSubmitting(false);
